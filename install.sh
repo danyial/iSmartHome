@@ -39,10 +39,11 @@ fi
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get install gcc python-dev
+sudo apt-get install python-pip
 
 cd ~/iSmartHome
 
-sed -i -e "s/\(DAEMON_OPTS=\).*/\1'-i $IPADDRESS -u $USERNAME -p $PASSWORD -v $VERSION'/" ismarthome.sh
+sed -i -e "s/\(DAEMON_OPTS=\).*/\1""-i $IPADDRESS -u $USERNAME -p $PASSWORD -v $VERSION""/" ismarthome.sh
 
 git clone https://github.com/giampaolo/psutil.git
 git clone https://github.com/dlitz/pycrypto.git
@@ -53,6 +54,8 @@ sudo python setup.py install
 cd ~/iSmartHome/pycrypto
 sudo python setup.py install
 
+sudo pip install requests
+
 cd ~/iSmartHome
 sudo cp ismarthome.sh /etc/init.d/ismarthome.sh
 sudo chmod 755 ismarthome.py
@@ -60,12 +63,6 @@ sudo chmod 755 /etc/init.d/ismarthome.sh
 cd /etc/init.d
 sudo update-rc.d ismarthome.sh defaults
 
-crontab -e > ismarthomecron
-echo "@daily sudo service ismarthome restart" >> ismarthomecron
-sudo crontab ismarthomecron
-rm ismarthomecron
-
-sudo reboot
 
 
 

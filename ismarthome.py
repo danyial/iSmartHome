@@ -19,26 +19,8 @@ from Crypto.Hash import SHA256
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.poolmanager import PoolManager
 
-# Reboot SHC. 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday
-REBOOT_DAYS = [0, 1, 2, 3, 4, 5, 6]
-
-# Reboot Hour (GMT)
-REBOOT_HOUR = 2
-
-# Reboot Minute
-REBOOT_MINUTE = 0
-
-# Reboot Flag
-SHOULD_REBOOT = False
-
-# Log SHC Response
-LOG_SHC_RESPONSE = False
-
-# Update states intervall in seconds
-UPDATE_STATES_INTERVALL = 5
-
 # Deafults
-LOG_FILENAME = "/home/pi/ismarthome/ismarthome.log"
+LOG_FILENAME = "/tmp/ismarthome.log"
 LOG_LEVEL = logging.INFO
 
 # Define and parse command line arguments
@@ -96,8 +78,6 @@ def main():
 
 
 def start(username, passwordHash, baseVersion, shcIP, clientId):
-    global SHOULD_REBOOT
-    
     clientId = RequestID()
         
     loginResponse = LoginRequest(username, passwordHash, baseVersion, shcIP, clientId)
@@ -129,20 +109,6 @@ def start(username, passwordHash, baseVersion, shcIP, clientId):
         logger.info('Login erfolgreich')
         logger.info('SessionId: ' + sessionId)
         
-        # Reboot SHC
-        if SHOULD_REBOOT == True:
-            SHOULD_REBOOT = False
-            logger.info('Starte SHC neu')
-                
-            restartResponse = RestartRequest(sessionId, baseVersion, shcIP, username)
-                    
-            logger.info(restartResponse)
-                        
-            logger.info('Warte 5 Minuten')
-            time.sleep(300)
-            start(username, passwordHash, baseVersion, shcIP, clientId)
-            return
-        
         acknowledgeResponse = NotificationRequest(sessionId, baseVersion, shcIP, clientId)
 
         if acknowledgeResponse == 'Error':
@@ -165,49 +131,31 @@ def start(username, passwordHash, baseVersion, shcIP, clientId):
         updateLoops = 300
         
         while updCounter < updateLoops:
-            # Reboot SHC Flag
-            for day in REBOOT_DAYS:
-                if day == time.localtime().tm_wday:
-                    if time.localtime().tm_hour == REBOOT_HOUR and time.localtime().tm_min == REBOOT_MINUTE:
-                        SHOULD_REBOOT = True
-        
             updCounter += 1
             
-            stateUpdates = ''
-            
-            try:
-                stateUpdates = GetUpdates(shcIP, clientId)
-            
-                Notifications = ET.fromstring(stateUpdates)
-                Notifications = Notifications.find('Notifications')
-                
-                if Notifications.find('LogicalDeviceStatesChangedNotification') is not None:
-                    logger.info('Uebertrage States zum Push-Server...')
-                    
-                    if LOG_SHC_RESPONSE == True:
-                        logger.info(stateUpdates)
-                
-                    pushResult = SendStatesToPushServer(stateUpdates)
-                    
-                    if pushResult == 'Error':
-                        logger.error('Uebertragung zum Push-Server fehlgeschlagen.')
-                    else:
-                        logger.info('Uebertragung zum Push-Server erfolgreich.')
-            except Exception:
-                logger.error('Aktualisierung der States fehlgeschlagen... Verbindung konnte nicht hergestellt werden. Naechster Login Versuch in 1 Minute')
-                    
-                time.sleep(60)
-                start(username, passwordHash, baseVersion, shcIP, clientId)
-                return
-
+            stateUpdates = GetUpdates(shcIP, clientId)
+                            
             if stateUpdates == 'Error':
-                logger.error('Aktualisierung der States fehlgeschlagen. Naechster Login Versuch in 1 Minute')
+                logger.error('Aktualisierung der States fehlgeschlagen... Naechster Login Versuch in 1 Minute')
                                     
                 time.sleep(60)
                 start(username, passwordHash, baseVersion, shcIP, clientId)
                 return
-        
-            time.sleep(UPDATE_STATES_INTERVALL)
+                    
+            Notifications = ET.fromstring(stateUpdates)
+            Notifications = Notifications.find('Notifications')
+                
+            if Notifications.find('LogicalDeviceStatesChangedNotification') is not None:
+                logger.info('Uebertrage States zum Push-Server...')
+                    
+                pushResult = SendStatesToPushServer(stateUpdates)
+                                    
+                if pushResult == 'Error':
+                    logger.error('Uebertragung zum Push-Server fehlgeschlagen.')
+                else:
+                    logger.info('Uebertragung zum Push-Server erfolgreich.')
+                    
+            time.sleep(3)
         else:
             logoutResponse = LogoutRequest(sessionId, baseVersion, shcIP, clientId)
                     
@@ -231,22 +179,6 @@ def LoginRequest(username, passwordHash, baseVersion, shcIP, clientId):
     loginResponse = SendRequest('https://' + shcIP + '/cmd', str.encode(loginRequest), headers)
         
     return loginResponse
-
-
-# Restart Request
-def RestartRequest(sessionId, baseVersion, shcIP, username):
-    restartRequest = RestartRequestString(sessionId, baseVersion, username)
-    
-    logger.info(restartRequest)
-    
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)',
-        'Content-Type': 'application/json'
-    }
-    
-    restartRequest = SendRequest('https://' + shcIP + '/cmd', str.encode(restartRequest), headers)
-    
-    return restartRequest
 
 
 # Notification Request
@@ -313,11 +245,6 @@ def LoginRequestString(username, password, baseVersion):
     return '<BaseRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="LoginRequest" RequestId="' + RequestID() + '" Version="' + baseVersion + '" UserName="' + username + '" Password="' + password + '" />'
 
 
-# Restart String
-def RestartRequestString(sessionId, baseVersion, username):
-    return '<BaseRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" SessionId="' + sessionId + '" Version="' + baseVersion + '" xsi:type="SHCRestartRequest" RequestId="' + RequestID() + '"><Reason /><Requester>' + username + '</Requester></BaseRequest>'
-
-
 # Logout String
 def LogoutRequestString(sessionId, baseVersion):	
     return '<BaseRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="LogoutRequest" RequestId="' + RequestID() + '" Version="' + baseVersion + '" SessionId="' + sessionId + '" />'
@@ -338,14 +265,13 @@ def SendRequest(url, d, h):
     s = requests.Session()
     s.mount('https://', MyAdapter())
     
-    response = 'Error'
+    response = s.post(url, verify=False, headers=h, data=d)
 
     try:
-        response = s.post(url, verify=False, headers=h, data=d)
         return response.text
     except Exception:
-        #logger.error("Fehler-Code: " + str(response.status_code))
-        logger.error("Response: " + response)
+        logger.error("Fehler-Code: " + str(response.status_code))
+        logger.error("Response: " + response.text)
         return 'Error'
 
 # Check network connection
