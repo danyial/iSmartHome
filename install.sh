@@ -17,7 +17,11 @@ sed -i -e "s/\(DAEMON_OPTS=\).*/\1'-i $IPADDRESS -u $USERNAME -p $PASSWORD -v $V
 git clone https://github.com/giampaolo/psutil.git
 git clone https://github.com/dlitz/pycrypto.git
 
+cd psutil
+sudo python setup.py install
 
+cd /tmp/iSmartHome/pycrypto
+sudo python setup.py install
 
 cd /opt
 sudo mkdir iSmartHome
