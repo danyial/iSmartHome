@@ -28,7 +28,7 @@ sudo mkdir iSmartHome
 cd iSmartHome
 sudo mkdir Logs
 sudo cp /tmp/iSmartHome/ismarthome.sh /etc/init.d/ismarthome.sh
-sudo cp /tmp/iSmartHome/ismarthome.py /opt/iSmartHome/ismarthome.sh
+sudo cp /tmp/iSmartHome/ismarthome.py /opt/iSmartHome/ismarthome.py
 sudo chmod 755 /opt/iSmartHome/ismarthome.py
 sudo chmod 755 /etc/init.d/ismarthome.sh
 cd /etc/init.d
