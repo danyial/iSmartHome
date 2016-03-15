@@ -10,7 +10,7 @@ VERSION=$(whiptail --title "Version" --inputbox "Bitte geben Sie die Softwarever
 
 sudo apt-get install gcc python-dev
 
-cd ~/iSmartHome
+cd /tmp/iSmartHome
 
 sed -i -e "s/\(DAEMON_OPTS=\).*/\1'-i $IPADDRESS -u $USERNAME -p $PASSWORD -v $VERSION'/" ismarthome.sh
 
@@ -20,22 +20,24 @@ git clone https://github.com/dlitz/pycrypto.git
 cd psutil
 sudo python setup.py install
 
-cd ~/iSmartHome/pycrypto
+cd /tmp/iSmartHome/pycrypto
 sudo python setup.py install
 
-cd ~/iSmartHome
-sudo cp ismarthome.sh /etc/init.d/ismarthome.sh
-sudo chmod 755 ismarthome.py
+cd /opt
+sudo mkdir iSmartHome
+cd /iSmartHome
+sudo mkdir Logs
+sudo cp /tmp/iSmartHome/ismarthome.sh /etc/init.d/ismarthome.sh
+sudo cp /tmp/iSmartHome/ismarthome.py /opt/iSmartHome/ismarthome.sh
+sudo chmod 755 /opt/iSmartHome/ismarthome.py
 sudo chmod 755 /etc/init.d/ismarthome.sh
 cd /etc/init.d
 sudo update-rc.d ismarthome.sh defaults
 
+cd /tmp
 sudo crontab -e > ismarthomecron
 echo "@daily sudo service ismarthome restart" >> ismarthomecron
 sudo crontab ismarthomecron
-rm ismarthomecron
-
-sudo reboot
 
 
 
