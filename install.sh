@@ -25,7 +25,7 @@ sudo python setup.py install
 
 cd /opt
 sudo mkdir iSmartHome
-cd /iSmartHome
+cd iSmartHome
 sudo mkdir Logs
 sudo cp /tmp/iSmartHome/ismarthome.sh /etc/init.d/ismarthome.sh
 sudo cp /tmp/iSmartHome/ismarthome.py /opt/iSmartHome/ismarthome.sh
