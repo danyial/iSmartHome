@@ -14,14 +14,6 @@ cd /tmp/iSmartHome
 
 sed -i -e "s/\(DAEMON_OPTS=\).*/\1'-i $IPADDRESS -u $USERNAME -p $PASSWORD -v $VERSION'/" ismarthome.sh
 
-git clone https://github.com/giampaolo/psutil.git
-git clone https://github.com/dlitz/pycrypto.git
-
-cd psutil
-sudo python setup.py install
-
-cd /tmp/iSmartHome/pycrypto
-sudo python setup.py install
 
 cd /opt
 sudo mkdir iSmartHome
@@ -35,9 +27,7 @@ cd /etc/init.d
 sudo update-rc.d ismarthome.sh defaults
 
 cd /tmp
-sudo crontab -e > ismarthomecron
-echo "@daily sudo service ismarthome restart" >> ismarthomecron
-sudo crontab ismarthomecron
+crontab -l | { cat; echo "@daily sudo service ismarthome restart"; } | crontab -
 
 
 
