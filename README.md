@@ -1,18 +1,18 @@
 # iSmartHome
 
-Installation:
-
-cd /tmp
-git clone https://github.com/danyial/iSmartHome.git
-cd iSmartHome
-chmod +x install.sh
-./install.sh
-
-
-Uninstall:
-
-cd /tmp
-git clone https://github.com/danyial/iSmartHome.git
-cd iSmartHome
-chmod +x uninstall.sh
-./uninstall.sh
+Installation:\n
+\n
+cd /tmp\n
+git clone https://github.com/danyial/iSmartHome.git\n
+cd iSmartHome\n
+chmod +x install.sh\n
+./install.sh\n
+\n
+\n
+Uninstall:\n
+\n
+cd /tmp\n
+git clone https://github.com/danyial/iSmartHome.git\n
+cd iSmartHome\n
+chmod +x uninstall.sh\n
+./uninstall.sh\n
