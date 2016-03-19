@@ -1,0 +1,30 @@
+{
+	"Actions": [
+		{
+			"LID": "DEVICE_ID",
+			"Attribute": "Value",
+			"Value": "False",
+			"Commands": [
+				"hyperion-remote --priority 50 --color black",
+				"sleep 2",
+				"sudo service hyperion stop"
+			]
+		},
+		{
+			"LID": "DEVICE_ID",
+			"Attribute": "Value",
+			"Value": "True",
+			"Commands": [
+				"sudo service hyperion restart"
+			]
+		},
+		{
+			"LID": "DEVICE_ID",
+			"Attribute": "DmLvl",
+			"Value": "0",
+			"Commands": [
+				"sudo reboot"
+			]
+		}
+	]
+}
