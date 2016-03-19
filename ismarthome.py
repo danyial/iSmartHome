@@ -231,13 +231,8 @@ def CheckNotifications(notifications):
 	try:
 		for LogicalDeviceStatesChangedNotification in notifications.findall('LogicalDeviceStatesChangedNotification'):
 			LogicalDeviceStates = LogicalDeviceStatesChangedNotification.find('LogicalDeviceStates')
-			logger.info(LogicalDeviceStates.tag)
-			logger.info(LogicalDeviceStates.attrib)
-
 			LogicalDeviceState = LogicalDeviceStates.find('LogicalDeviceState')
-			logger.info(LogicalDeviceState.tag)
-			logger.info(LogicalDeviceState.attrib)
-						
+									
 			LID = LogicalDeviceState.get('LID')
 			
 			for action in ACTIONS['Actions']:
@@ -248,7 +243,7 @@ def CheckNotifications(notifications):
 						if Value == action['Value']:
 							for command in action['Commands']:
 								commands.getstatusoutput(command)
-								logger.info('Command: ' + command + 'executed')
+								logger.info('Command: "' + command + '" executed')
 					else:
 						Ppts = LogicalDeviceState.find('Ppts')
 						
@@ -260,7 +255,7 @@ def CheckNotifications(notifications):
 								if Value == action['Value']:
 									for command in action['Commands']:
 										commands.getstatusoutput(command)
-										logger.info('Command: ' + command + 'executed')
+										logger.info('Command: "' + command + '" executed')
 					
 	except Exception as e:
 		logger.error(e)
