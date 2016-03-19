@@ -1,7 +1,7 @@
 {
 	"Actions": [
 		{
-			"LID": "DEVICE_ID",
+			"LID": "DEVICE_ID_1",
 			"Attribute": "Value",
 			"Value": "False",
 			"Commands": [
@@ -11,7 +11,7 @@
 			]
 		},
 		{
-			"LID": "DEVICE_ID",
+			"LID": "DEVICE_ID_1",
 			"Attribute": "Value",
 			"Value": "True",
 			"Commands": [
@@ -19,7 +19,7 @@
 			]
 		},
 		{
-			"LID": "DEVICE_ID",
+			"LID": "DEVICE_ID_2",
 			"Attribute": "DmLvl",
 			"Value": "0",
 			"Commands": [
