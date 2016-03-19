@@ -25,7 +25,7 @@ chmod +x uninstall.sh
 Befehle ausführen lassen:
 
 Die Datei Actions.json kann dementsprechend angepasst werden.
-Statt der DEVICE_ID_X wird die tatsächliche ID der Geräts verwendet.
+Statt der DEVICE_ID_X muss die tatsächliche ID der Geräte eingegeben werden.
 
 ```
 {
