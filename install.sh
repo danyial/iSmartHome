@@ -29,12 +29,12 @@ sudo mkdir iSmartHome
 cd iSmartHome
 sudo mkdir Logs
 cd /var/www/html
-sudo mkdir iSmartHome
+sudo mkdir ismarthome
 
 sudo cp /tmp/iSmartHome/ismarthome.sh /etc/init.d/ismarthome.sh
 sudo cp /tmp/iSmartHome/ismarthome.py /opt/iSmartHome/ismarthome.py
 sudo cp /tmp/iSmartHome/Actions.json /opt/iSmartHome/Actions.json
-sudo cp /tmp/iSmartHome/index.php /var/www/html/iSmartHome/index.php
+sudo cp /tmp/iSmartHome/index.php /var/www/html/ismarthome/index.php
 
 sudo chmod 755 /opt/iSmartHome/ismarthome.py
 sudo chmod 755 /etc/init.d/ismarthome.sh
