@@ -41,12 +41,9 @@
 			echo 'Curl-Fehler: ' . $error;
 			return;
 		}
-		
-		
-		
+				
 		// Response der Zentrale zurückgeben
 		echo '<pre>'.$response.'</pre>';
-		//echo htmlentities($response, ENT_COMPAT, 'UTF-8');
 	} else {
 		// Übernehmen der Aktion (nicht verändern)
 		$cmd = $_GET["cmd"];
