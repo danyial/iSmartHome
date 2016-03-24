@@ -8,7 +8,7 @@ PASSWORD=$(whiptail --title "Passwort" --inputbox "Bitte geben Sie Ihr SmartHome
 
 VERSION=$(whiptail --title "Version" --inputbox "Bitte geben Sie die Softwareversion der Zentrale ein" 10 60 1.70 3>&1 1>&2 2>&3)
 
-sudo apt-get install gcc python-dev
+sudo apt-get install gcc python-dev python-requests
 
 cd /tmp/iSmartHome
 
