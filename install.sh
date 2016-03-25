@@ -51,5 +51,19 @@ sudo service ismarthome start
 sudo lighttpd-enable-mod fastcgi fastcgi-php
 sudo service lighttpd restart
 
+clear
 
+echo "iSmartHome-Service Status:"
+echo
 
+sudo service ismarthome status
+
+echo
+echo
+echo "Antwort der Zentrale (Die erste Zeile sollte mit ”<pre><BaseResponse” anfangen)"
+echo
+
+curl http://127.0.0.1/ismarthome/index.php?test=$IPADDRESS
+
+echo
+echo
