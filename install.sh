@@ -51,6 +51,8 @@ sudo service ismarthome start
 sudo lighttpd-enable-mod fastcgi fastcgi-php
 sudo service lighttpd restart
 
+sleep 5
+
 clear
 
 echo "iSmartHome-Service Status:"
