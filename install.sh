@@ -16,7 +16,7 @@ cd /tmp/iSmartHome
 
 sed -i -e "s/\(DAEMON_OPTS=\).*/\1'-i $IPADDRESS -u $USERNAME -p $PASSWORD -v $VERSION'/" ismarthome.sh
 sed -i -e "s/\(DAEMON_USER=\).*/\1$USER/" ismarthome.sh
-sed -i -e "s/\(server.port \+=\).*/\1 $PORT/" /etc/lighttpd/lighttpd.conf
+sudo sed -i -e "s/\(server.port \+=\).*/\1 $PORT/" /etc/lighttpd/lighttpd.conf
 
 git clone https://github.com/giampaolo/psutil.git
 git clone https://github.com/dlitz/pycrypto.git
