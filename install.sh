@@ -8,12 +8,15 @@ PASSWORD=$(whiptail --title "Passwort" --inputbox "Bitte geben Sie Ihr SmartHome
 
 VERSION=$(whiptail --title "Version" --inputbox "Bitte geben Sie die Softwareversion der Zentrale ein" 10 60 1.70 3>&1 1>&2 2>&3)
 
+PORT=$(whiptail --title "Version" --inputbox "Falls Sie nicht den Standard-Port (80) für den Webserver nutzen wollen, ändern Sie diesen bitte hier" 10 60 80 3>&1 1>&2 2>&3)
+
 sudo apt-get --assume-yes install gcc python-dev python-requests lighttpd php5-common php5-cgi php5 php5-curl
 
 cd /tmp/iSmartHome
 
 sed -i -e "s/\(DAEMON_OPTS=\).*/\1'-i $IPADDRESS -u $USERNAME -p $PASSWORD -v $VERSION'/" ismarthome.sh
 sed -i -e "s/\(DAEMON_USER=\).*/\1$USER/" ismarthome.sh
+sed -i -e "s/\(server.port \+=\).*/\1 $PORT/" /etc/lighttpd/lighttpd.conf
 
 git clone https://github.com/giampaolo/psutil.git
 git clone https://github.com/dlitz/pycrypto.git
@@ -65,7 +68,7 @@ echo
 echo "Antwort der Zentrale (Die erste Zeile sollte mit ”<pre><BaseResponse” anfangen)"
 echo
 
-curl http://127.0.0.1/ismarthome/index.php?test=$IPADDRESS
+curl http://127.0.0.1:$PORT/ismarthome/index.php?test=$IPADDRESS
 
 echo
 echo
