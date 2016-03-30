@@ -8,7 +8,7 @@ PASSWORD=$(whiptail --title "Passwort" --inputbox "Bitte geben Sie Ihr SmartHome
 
 VERSION=$(whiptail --title "Version" --inputbox "Bitte geben Sie die Softwareversion der Zentrale ein" 10 60 1.70 3>&1 1>&2 2>&3)
 
-PORT=$(whiptail --title "Version" --inputbox "Falls Sie nicht den Standard-Port (80) für den Webserver nutzen wollen, ändern Sie diesen bitte hier" 10 60 80 3>&1 1>&2 2>&3)
+PORT=$(whiptail --title "Version" --inputbox "Falls Sie nicht den Standard-Port (80) für den Webserver (wird für den Fernzugriff benötigt) nutzen wollen, ändern Sie diesen bitte hier" 10 60 80 3>&1 1>&2 2>&3)
 
 sudo apt-get --assume-yes install gcc python-dev python-requests lighttpd php5-common php5-cgi php5 php5-curl
 
